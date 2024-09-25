@@ -1,0 +1,40 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres:14.3
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      - ./volumes/postgresql/data/:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
+  api: &api
+    build:
+      context: ./api
+      dockerfile : Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    platform: 'linux/amd64'
+    volumes:
+      - ./api:/src
+      - /src/.venv
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    environment:
+      DB_NAME: db
+      DB_USERNAME: root
+      DB_PASSWORD: pass
+      DB_HOST: db
+    env_file:
+      - .env
+
