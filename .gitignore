@@ -1,0 +1,15 @@
+*.log.*
+.env
+.python-version
+/**/__pycache__/*
+.vscode
+.venv/*
+volumes/*
+csv-data-dir/
+*.log
+application.log.*
+.idea
+.DS_Store
+.env.*.local
+
+node_modules
